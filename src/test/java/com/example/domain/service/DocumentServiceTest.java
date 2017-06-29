@@ -6,15 +6,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -23,35 +23,31 @@ public class DocumentServiceTest {
   @Autowired
   DocumentService target;
 
-  @SpyBean
+  @MockBean
   DocumentEventListener eventListener;
 
   @Captor
-  ArgumentCaptor<Document.OnCreatedEvent> eventCaptor;
+  ArgumentCaptor<Document.OnCreated> eventCaptor;
 
   @Test
   public void testOld() {
 
-    target.saveOld();
+    Document actual = target.saveOld("xxx");
 
-    Mockito
-        .verify(eventListener, Mockito.times(1))
-        .onDocumentCreated(eventCaptor.capture());
+    verify(eventListener, times(1)).onCreated(eventCaptor.capture());
 
-    assertThat(eventCaptor.getValue().getDocument().getId(), is(notNullValue()));
+    assertThat(eventCaptor.getValue().getDocument().getId(), is(actual.getId()));
     assertThat(eventCaptor.getValue().getDocument().getName(), is("xxx"));
   }
 
   @Test
   public void testNew() {
 
-    target.saveNew();
+    Document actual = target.saveNew("yyy");
 
-    Mockito
-        .verify(eventListener, Mockito.times(1))
-        .onDocumentCreated(eventCaptor.capture());
+    verify(eventListener, times(1)).onCreated(eventCaptor.capture());
 
-    assertThat(eventCaptor.getValue().getDocument().getId(), is(notNullValue()));
+    assertThat(eventCaptor.getValue().getDocument().getId(), is(actual.getId()));
     assertThat(eventCaptor.getValue().getDocument().getName(), is("yyy"));
   }
 }

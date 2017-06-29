@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class DocumentEventListener {
 
   @EventListener
-  public void onDocumentCreated(Document.OnCreatedEvent event) {
+  public void onCreated(Document.OnCreated event) {
 
     Document document = event.getDocument();
 

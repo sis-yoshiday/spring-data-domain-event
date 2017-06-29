@@ -43,14 +43,14 @@ public class Document extends AbstractAggregateRoot implements Serializable {
     Document document = new Document();
     document.name = name;
 
-    document.registerEvent(new OnCreatedEvent(document));
+    document.registerEvent(new OnCreated(document));
 
     return document;
   }
 
   @RequiredArgsConstructor
   @Getter
-  public static class OnCreatedEvent {
+  public static class OnCreated {
 
     private final Document document;
   }

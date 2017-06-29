@@ -14,17 +14,17 @@ public class DocumentService {
 
   private final ApplicationEventPublisher eventPublisher;
 
-  public Document saveOld() {
+  public Document saveOld(String name) {
 
-    Document document = repository.save(Document.createOld("xxx"));
+    Document document = repository.save(Document.createOld(name));
 
-    eventPublisher.publishEvent(new Document.OnCreatedEvent(document));
+    eventPublisher.publishEvent(new Document.OnCreated(document));
 
     return document;
   }
 
-  public Document saveNew() {
+  public Document saveNew(String name) {
 
-    return repository.save(Document.createNew("yyy"));
+    return repository.save(Document.createNew(name));
   }
 }
